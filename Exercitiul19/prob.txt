@@ -1,0 +1,15 @@
+19.
+Se citesc două numere naturale N (1 ≤ N ≤ 18) și K (1 ≤ K ≤ N). Să se creeze și să se afișeze
+o matrice cu N linii și N coloane care să conțină toate numerele de la 1 la N^2 astfel încât:
+- Oricare două valori consecutive să fie alăturate în matrice (căsuțe alăturate pe orizontală sau verticală).
+- Valoarea 1 să fie pe linia K (liniile se numerotează de sus în jos).
+
++--------+-----------------+
+| mat.in |    mat.out      |
++--------+-----------------+
+|   4 2  |   2 3 4 5       |
+|        |   1 8 7 6       |
+|        |   16 9 10 11    |
+|        |   15 14 13 12   |
++--------+-----------------+
+
