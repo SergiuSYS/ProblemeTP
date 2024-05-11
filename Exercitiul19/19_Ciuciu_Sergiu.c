@@ -1,80 +1,90 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-#define MAX_SIZE 18
+void umplere_matrice(int **matrice, int k, int n);
 
-// Funcție pentru a genera matricea conform cerințelor
-void generateMatrix(int N, int K, int matrix[MAX_SIZE][MAX_SIZE]) {
-    int num = 1;
-    int row = K - 1;
-    int col = 0;
-    int direction = 1;
-
-    // Inițializăm matricea cu 0
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            matrix[i][j] = 0;
-        }
-    }
-
-    while (num <= N * N) {
-        matrix[row][col] = num;
-        num++;
-
-        // Determinăm următoarea poziție în funcție de direcție
-        if (direction == 1) {
-            if (col + 1 < N && matrix[row][col + 1] == 0) {
-                col++;
-            } else {
-                direction = 2;
-                row++;
-            }
-        } else if (direction == 2) {
-            if (row + 1 < N && matrix[row + 1][col] == 0) {
-                row++;
-            } else {
-                direction = 3;
-                col--;
-            }
-        } else if (direction == 3) {
-            if (col - 1 >= 0 && matrix[row][col - 1] == 0) {
-                col--;
-            } else {
-                direction = 4;
-                row--;
-            }
-        } else if (direction == 4) {
-            if (row - 1 >= 0 && matrix[row - 1][col] == 0) {
-                row--;
-            } else {
-                direction = 1;
-                col++;
-            }
-        }
-    }
-}
-
-// Funcție pentru a afișa matricea
-void printMatrix(int N, int matrix[MAX_SIZE][MAX_SIZE]) {
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            printf("%d ", matrix[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-int main() {
+int main()
+{
+    FILE *InputFile;
+    FILE *OutputFile;
+    InputFile = fopen("mat.in", "r");
+    OutputFile = fopen("mat.out", "w");
     int N, K;
-    int matrix[MAX_SIZE][MAX_SIZE];
 
-    // Citim N și K
-    scanf("%d %d", &N, &K);
+    if (InputFile == NULL || OutputFile == NULL)
+    {
+        printf("Fișierul nu s-a putut deschide!\n");
+        return 0;
+    }
+    fscanf(InputFile, "%d %d", &N, &K);
+    
+    int **mat = (int **)malloc(N * sizeof(int *));
+    for (int i = 0; i < N; ++i)
+    {
+        mat[i] = (int *)malloc(N * sizeof(int));
+    }
+     umplere_matrice(mat, K, N);
+    
+    for (int i = 0; i < N; ++i)
+    {
+        for (int j = 0; j < N; ++j)
+        {
+            fprintf(OutputFile, "%d ", mat[i][j]);
+        }
+        fprintf(OutputFile, "\n");
+    }
 
-    // Generăm matricea
-    generateMatrix(N, K, matrix);
+    fclose(OutputFile);
+    fclose(InputFile);
 
-    // Afișăm matricea
-    printMatrix(N, matrix);
+    for (int i = 0; i < N; ++i)
+    {
+        free(mat[i]);
+    }
+    free(mat);
 
     return 0;
+}
+
+void umplere_matrice(int **matrice, int K, int N){
+    for (int i = 0; i < N; ++i)
+    {
+        for (int j = 0; j < N; ++j)
+        {
+            matrice[i][j] = 0;
+        }
+    }
+
+    int nr = 1;
+    matrice[K - 1][0] = nr++;
+
+    for (int i = K - 2; i >= 0; --i)
+    {
+        matrice[i][0] = nr++;
+    }
+
+    int direction = 1;
+    for (int i = K - 1; i <= N; i++)
+    {
+        if (direction == 1)
+        {
+            for (int j = 1; j < N; j++)
+            {
+                matrice[i-1][j] = nr++;
+            }
+        }
+        else
+        {
+            for (int j = N - 1; j > 0; j--)
+            {
+                matrice[i-1][j] = nr++;
+            }
+        }
+        direction *= -1;
+    }
+    for (int i = N - 1; i > K - 1; i--)
+    {
+        matrice[i][0] = nr++;
+    }
+
 }
